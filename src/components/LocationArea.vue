@@ -5,9 +5,9 @@
     </p>
     <vue-slider
       v-model="range"
-      :min="0"
-      :max="100"
-      :process="process"
+      :min="minArea"
+      :max="maxArea"
+      :enable-cross="false"
       :rail-style="{ backgroundColor: 'rgb(234, 234, 234)' }"
       :process-style="{ backgroundColor: 'rgb(126, 182, 33)' }"
       :style="{
@@ -25,21 +25,23 @@
     <template>
       <div class="filter__range-val-block">
         <div class="filter__range-val">
-          от
+          от 
           <input
-            :value="range[0]"
+            v-model.number="range[0]"
             class="filter__range-input"
             type="number"
-            @input="setRange(0, $event)"
+            :min="minArea"
+            :max="maxArea"
           >
-        </div>
+        </div> 
         <div class="filter__range-val">
-          до
+          до 
           <input
-            :value="range[1]"
+            v-model.number="range[1]"
             class="filter__range-input"
             type="number"
-            @input="setRange(1, $event)"
+            :min="minArea"
+            :max="maxArea"
           >
         </div>
       </div>
@@ -55,12 +57,19 @@ export default {
     components: {
         VueSlider,
     },
+    props: {
+        minArea: Number,
+        maxArea: Number
+    },
     data: () => ({
-        min:     0,
-        max:     999,
-        range:   [20, 500],
-        process: dotsPos => [[dotsPos[0], dotsPos[1]]],
+        range: [50, 98],
     }),
+    mounted() {
+        this.range = [
+            this.$store.state.queryData.min_area,
+            this.$store.state.queryData.max_area
+        ]
+    },
     methods: {
         setRange(pos, event) {
             const val = event.target.value;

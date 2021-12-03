@@ -230,9 +230,7 @@ body {
 }
 
 .filter__range-val {
-	display: -webkit-inline-box;
-	display: -ms-inline-flexbox;
-	display: inline-flex;
+	display: flex;
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
@@ -240,19 +238,21 @@ body {
 	-ms-flex-pack: center;
 	justify-content: center;
 	height: 50px;
-	min-width: 110px;
+	width: 100px;
 	font-weight: 600;
-	padding: 0 20px;
+	padding: 0 8px;
 	border: 2px solid #cdcdcd;
 	border-radius: 5px
 }
 
 .filter__range-input {
-	margin-left: 4px;
+	margin-left: 2px;
     border: none;
     font-size: 18px;
     font-weight: 700;
-    max-width: 50px;
+    width: 60px;
+	background: none;
+	outline: none;
 }
 
 @media (max-width:780px) {

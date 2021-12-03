@@ -2,10 +2,9 @@
   <div class="filter__control-block">
     <vSelect
       v-model="selected"
-      placeholder="Район"
+      placeholder="Жилой комплекс"
       label="name"
-      :options="districts"
-      @input="changeDistrict"
+      :options="projects"
     />
   </div>
 </template>
@@ -14,19 +13,19 @@
 import vSelect from 'vue-select';
 
 export default {
-    name:       'LocationArea',
+    name:       'LocationProject',
     components: {
         vSelect
     },
     props: {
-        districts: Array
+        projects: Array
     },
     data: () => ({
         selected: null
     }),
     methods: {
-        changeDistrict(val) {
-            this.$emit('selectDistrict', val)
+        clearSelected() {
+            this.selected = null;
         }
     }
 };

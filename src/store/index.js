@@ -6,13 +6,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         filterData: {
-            finish_types_kz: '',
-            finish_types_ru: '',
-            max_area:        '',
-            max_price:       '',
-            min_area:        '',
-            min_price:       '',
-            districts:       [],
+            finish_types_kz: null,
+            finish_types_ru: null,
+            max_area:        null,
+            max_price:       null,
+            min_area:        null,
+            min_price:       null,
+            districts:       null,
+            projects:        null,
+        },
+        queryData: {
+            location_type: null,
+            room_number:   null,
+            max_area:      null,
+            max_price:     null,
+            min_area:      null,
+            min_price:     null,
+            district:      null,
+            project:       null,
         },
         translater: JSON.parse(`{
           "ru":{
@@ -43,15 +54,15 @@ export default new Vuex.Store({
                 "find":"Табу",
                 "clear":"Шығарып тастау"
             }
-        }`)
+        }`),
     },
     mutations: {
         setFilterData (state, payload) {
-            state.filterData = {...this.filterData, ...payload.filterData};
+            state.filterData = {...state.filterData, ...payload.filterData};
         },
-        setDistricts (state, payload) {
-            state.filterData.districts = payload.districts;
-        },
+        setQueryData (state, payload) {
+            state.queryData = payload;
+        }
     },
     actions: {
         getFilterData () {
@@ -68,25 +79,24 @@ export default new Vuex.Store({
                     this.commit('setFilterData', { filterData: res });
                 })
                 .catch((err) => {
-                    throw new Error("Ошибка получения списка городов: ".concat(err.message))
-                });
-
-            fetch(
-                'https://exin.kz/api/district/filter-data', {
-                    headers: {
-                        accept:        "application/json",
-                        Authorization: "Bearer ".concat("aAOI5zskZ1XBssXpH0FIOIv2SFtPJwKg")
-                    }
-                }
-            )
-                .then(res=>res.json())
-                .then((res) => {
-                    this.commit('setDistricts', { districts: res });
-                })
-                .catch((err) => {
                     throw new Error("Ошибка получения конфигов фильтра: ".concat(err.message))
                 });
         },
+        getQueryData () {
+            const link = new URL(document.URL);
+            const query = {
+                location_type: link.searchParams.get('location_type'),
+                room_number:   link.searchParams.get('room_number'),
+                max_area:      link.searchParams.get('area_max'),
+                max_price:     link.searchParams.get('price_max'),
+                min_area:      link.searchParams.get('area_min'),
+                min_price:     link.searchParams.get('price_min'),
+                district:      link.searchParams.get('district'),
+                project:       link.searchParams.get('project'),
+            }
+
+            this.commit('setQueryData', query);
+        }
     },
     modules: {
     },

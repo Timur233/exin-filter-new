@@ -1,18 +1,40 @@
 <template>
-  <div id="app">
-    <section class="filter pr-pages">
+  <div
+    id="app"
+    style="height: 100%"
+  >
+    <section
+      class="filter pr-pages"
+      style="height: 100%"
+    >
       <div class="container">
         <div class="filter__block">
           <div class="filter__wrap">
             <LocationTypes />
             <RoomsCount />
             <div class="filter__ranges indent-block">
-              <LocationPrice />
-              <LocationArea />
+              <keep-alive>
+                <LocationPrice
+                  :min-price="filterData.minPrice"
+                  :max-price="filterData.maxPrice"
+                />
+              </keep-alive>
+              <keep-alive>
+                <LocationArea
+                  :min-area="filterData.minArea"
+                  :max-area="filterData.maxArea"
+                />
+              </keep-alive>
             </div>
             <div class="filter__controls indent-block">
-              <LocationDistrict />
-              <LocationDistrict />
+              <LocationDistrict
+                :districts="[...filterData.districts]"
+                @selectDistrict="selectDistrict($event)"
+              />
+              <LocationProject
+                ref="projects"
+                :projects="[...filterProjectList]"
+              />
               <ControlButtons />
             </div>
           </div>
@@ -28,6 +50,7 @@ import LocationTypes from "./components/LocationTypes.vue";
 import LocationPrice from "./components/LocationPrice.vue";
 import LocationArea from "./components/LocationArea.vue";
 import LocationDistrict from "./components/LocationDistrict.vue";
+import LocationProject from "./components/LocationProject.vue";
 import ControlButtons from "./components/ControlButtons.vue";
 import "vue-slider-component/theme/default.css";
 
@@ -39,15 +62,56 @@ export default {
         LocationPrice,
         LocationArea,
         LocationDistrict,
+        LocationProject,
         ControlButtons,
     },
-    data:    () => ({}),
-    created: function () {
-        this.$store.dispatch("getFilterData");
-        this.$store.dispatch("getDistricts");
+    data: () => ({
+        selectedDistrict: null,
+    }),
+    computed: {
+        filterData(){
+            const filterData = this.$store.state.filterData;
 
-        console.log(this.$store.state.translater);
+            return {
+                minArea:      filterData.min_area,
+                maxArea:      filterData.max_area,
+                minPrice:     filterData.min_price,
+                maxPrice:     filterData.max_price,
+                finishTypeRu: filterData.finish_types_kz,
+                finishTypeKz: filterData.finish_types_ru,
+                districts:    filterData.districts,
+                projects:     filterData.projects
+            }
+
+        },
+        filterProjectList () {
+            const filterData = this.$store.state.filterData;
+            let filteredData = [];
+            const district = this.selectedDistrict;
+
+            if (district === null) {
+                return filterData.projects;
+            }
+
+            filteredData = [...filterData.projects].filter((project) => {
+                return project.district == district
+            });
+
+            return filteredData;
+        },
     },
+    mounted: function () {
+        this.$store.dispatch("getFilterData");
+    },
+    created: function () {
+        this.$store.dispatch("getQueryData");
+    },
+    methods: {
+        selectDistrict(obj) {
+            this.selectedDistrict = obj ? obj.uuid : null;
+            this.$refs.projects.clearSelected();
+        }
+    }
 };
 </script>
 
