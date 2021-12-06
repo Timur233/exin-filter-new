@@ -23,10 +23,23 @@ export default {
     data: () => ({
         selected: null
     }),
+    watch: {
+        projects: function () {
+            const selectedUuid = this.$store.state.queryData.project;
+
+            if (selectedUuid) {
+                this.projects.forEach((project) => {
+                    if (project.uuid === selectedUuid) {
+                        this.selected = project;
+                    }
+                });
+            }
+        }
+    },
     methods: {
         clearSelected() {
             this.selected = null;
         }
-    }
+    },
 };
 </script>

@@ -25,6 +25,7 @@ export default new Vuex.Store({
             district:      null,
             project:       null,
         },
+        baseUrl:    null,
         translater: JSON.parse(`{
           "ru":{
               "price":"Стоимость, млн. тг",
@@ -62,10 +63,13 @@ export default new Vuex.Store({
         },
         setQueryData (state, payload) {
             state.queryData = payload;
+        },
+        setBaseUrl (state, payload) {
+            state.baseUrl = payload;
         }
     },
     actions: {
-        getFilterData () {
+        getFilterData (getQueryData) {
             fetch(
                 'https://exin.kz/api/locations/filter-data', {
                     headers: {
@@ -77,6 +81,7 @@ export default new Vuex.Store({
                 .then(res=>res.json())
                 .then((res) => {
                     this.commit('setFilterData', { filterData: res });
+                    this.dispatch('getQueryData');
                 })
                 .catch((err) => {
                     throw new Error("Ошибка получения конфигов фильтра: ".concat(err.message))
@@ -84,18 +89,20 @@ export default new Vuex.Store({
         },
         getQueryData () {
             const link = new URL(document.URL);
+            const baseUrl = link.href.split('?')[0];
             const query = {
                 location_type: link.searchParams.get('location_type'),
                 room_number:   link.searchParams.get('room_number'),
-                max_area:      link.searchParams.get('area_max'),
-                max_price:     link.searchParams.get('price_max'),
-                min_area:      link.searchParams.get('area_min'),
-                min_price:     link.searchParams.get('price_min'),
+                max_area:      Number(link.searchParams.get('area_max') || this.state.filterData.max_area),
+                max_price:     Number(link.searchParams.get('price_max') || this.state.filterData.max_price),
+                min_area:      Number(link.searchParams.get('area_min') || this.state.filterData.min_area),
+                min_price:     Number(link.searchParams.get('price_min') || this.state.filterData.min_price),
                 district:      link.searchParams.get('district'),
                 project:       link.searchParams.get('project'),
             }
 
             this.commit('setQueryData', query);
+            this.commit('setBaseUrl', baseUrl)
         }
     },
     modules: {

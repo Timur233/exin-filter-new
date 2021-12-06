@@ -1,46 +1,37 @@
 <template>
-  <div
-    id="app"
-    style="height: 100%"
-  >
-    <section
-      class="filter pr-pages"
-      style="height: 100%"
-    >
-      <div class="container">
-        <div class="filter__block">
-          <div class="filter__wrap">
-            <LocationTypes />
-            <RoomsCount />
-            <div class="filter__ranges indent-block">
-              <keep-alive>
-                <LocationPrice
-                  :min-price="filterData.minPrice"
-                  :max-price="filterData.maxPrice"
-                />
-              </keep-alive>
-              <keep-alive>
-                <LocationArea
-                  :min-area="filterData.minArea"
-                  :max-area="filterData.maxArea"
-                />
-              </keep-alive>
-            </div>
-            <div class="filter__controls indent-block">
-              <LocationDistrict
-                :districts="[...filterData.districts]"
-                @selectDistrict="selectDistrict($event)"
-              />
-              <LocationProject
-                ref="projects"
-                :projects="[...filterProjectList]"
-              />
-              <ControlButtons />
-            </div>
-          </div>
-        </div>
+  <div class="filter__block">
+    <div class="filter__wrap">
+      <LocationTypes ref="LocationTypes" />
+      <RoomsCount ref="RoomsCount" />
+      <div class="filter__ranges indent-block">
+        <keep-alive>
+          <LocationPrice
+            ref="LocationPrice"
+            :min-price="filterData.minPrice"
+            :max-price="filterData.maxPrice"
+          />
+        </keep-alive>
+        <keep-alive>
+          <LocationArea
+            ref="LocationArea"
+            :min-area="filterData.minArea"
+            :max-area="filterData.maxArea"
+          />
+        </keep-alive>
       </div>
-    </section>
+      <div class="filter__controls indent-block">
+        <LocationDistrict
+          ref="LocationDistrict"
+          :districts="[...filterData.districts]"
+          @selectDistrict="selectDistrict($event)"
+        />
+        <LocationProject
+          ref="LocationProject"
+          :projects="[...filterProjectList]"
+        />
+        <ControlButtons @searchLocations="searchLocations" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -100,16 +91,39 @@ export default {
             return filteredData;
         },
     },
-    mounted: function () {
+    created: function () {
+        this.$store.dispatch('getQueryData');
         this.$store.dispatch("getFilterData");
     },
-    created: function () {
-        this.$store.dispatch("getQueryData");
+    mounted() {
+        console.log(this.$refs.LocationTypes.activeType);
     },
     methods: {
         selectDistrict(obj) {
             this.selectedDistrict = obj ? obj.uuid : null;
-            this.$refs.projects.clearSelected();
+            this.$refs.LocationProject.clearSelected();
+        },
+        searchLocations() {
+            const filterParams = {
+                location_type: this.$refs.LocationTypes.activeType || null,
+                room_number:   this.$refs.RoomsCount.activeRoom || null,
+                area_min:      this.$refs.LocationArea.range[0],
+                area_max:      this.$refs.LocationArea.range[1],
+                price_min:     this.$refs.LocationPrice.range[0],
+                price_max:     this.$refs.LocationPrice.range[1],
+                district:      this.$refs.LocationDistrict.selected ? this.$refs.LocationDistrict.selected.uuid : null,
+                project:       this.$refs.LocationProject.selected ? this.$refs.LocationProject.selected.uuid : null,
+            }
+            const baseUrl = this.$store.state.baseUrl;
+            const link = new URL(baseUrl);
+
+            Object.keys(filterParams).forEach((key) => {
+                if (filterParams[key]) {
+                    link.searchParams.set(key, filterParams[key])
+                }
+            });
+
+            document.location.href = link.href;
         }
     }
 };

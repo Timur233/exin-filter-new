@@ -24,6 +24,19 @@ export default {
     data: () => ({
         selected: null
     }),
+    watch: {
+        districts: function () {
+            const selectedUuid = this.$store.state.queryData.district;
+
+            if (selectedUuid) {
+                this.districts.forEach((district) => {
+                    if (district.uuid === selectedUuid) {
+                        this.selected = district;
+                    }
+                });
+            }
+        }
+    },
     methods: {
         changeDistrict(val) {
             this.$emit('selectDistrict', val)

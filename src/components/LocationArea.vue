@@ -1,5 +1,8 @@
 <template>
-  <div class="filter__range-block">
+  <div
+    v-show="isVisible"
+    class="filter__range-block"
+  >
     <p class="filter__range-label">
       Площадь, м²
     </p>
@@ -62,13 +65,17 @@ export default {
         maxArea: Number
     },
     data: () => ({
-        range: [50, 98],
+        range:     [50, 98],
+        isVisible: false,
     }),
     mounted() {
-        this.range = [
-            this.$store.state.queryData.min_area,
-            this.$store.state.queryData.max_area
-        ]
+        setTimeout(()=>{
+            this.range = [
+                this.$store.state.queryData.min_area,
+                this.$store.state.queryData.max_area
+            ];
+            this.isVisible = true;
+        }, 1000);
     },
     methods: {
         setRange(pos, event) {

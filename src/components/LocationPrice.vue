@@ -1,5 +1,8 @@
 <template>
-  <div class="filter__range-block">
+  <div
+    v-show="isVisible"
+    class="filter__range-block"
+  >
     <p class="filter__range-label">
       Стоимость, млн. тг
     </p>
@@ -62,13 +65,17 @@ export default {
         maxPrice: Number
     },
     data: () => ({
-        range: [20, 100],
+        range:     [20, 100],
+        isVisible: false,
     }),
     mounted() {
-        this.range = [
-            this.$store.state.queryData.min_price,
-            this.$store.state.queryData.max_price
-        ]
+        setTimeout(()=>{
+            this.range = [
+                this.$store.state.queryData.min_price,
+                this.$store.state.queryData.max_price
+            ];
+            this.isVisible = true;    
+        }, 1000);
     }
 
 
