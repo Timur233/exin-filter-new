@@ -4,7 +4,7 @@
     class="filter__range-block"
   >
     <p class="filter__range-label">
-      Площадь, м²
+      {{ translate.area }}
     </p>
     <vue-slider
       v-model="range"
@@ -28,7 +28,9 @@
     <template>
       <div class="filter__range-val-block">
         <div class="filter__range-val">
-          от 
+          <span class="filter__range-span">
+            {{ translate.before }} 
+          </span>
           <input
             v-model.number="range[0]"
             class="filter__range-input"
@@ -38,7 +40,9 @@
           >
         </div> 
         <div class="filter__range-val">
-          до 
+          <span class="filter__range-span">
+            {{ translate.from }} 
+          </span>
           <input
             v-model.number="range[1]"
             class="filter__range-input"
@@ -67,8 +71,16 @@ export default {
     data: () => ({
         range:     [50, 98],
         isVisible: false,
+        translate: {},
     }),
     mounted() {
+        const translater = this.$store.state.translater;
+        const lang = this.$store.state.lang;
+
+        this.translate.area = translater[lang].area;
+        this.translate.from = translater[lang].from;
+        this.translate.before = translater[lang].before;
+
         setTimeout(()=>{
             this.range = [
                 this.$store.state.queryData.min_area,

@@ -32,7 +32,7 @@ export default {
             { number: '3', value: '3' },
             { number: '3-4', value: '3-4' },
             { number: '4', value: '4' },
-            { number: '5+', value: '5' }
+            { number: '5+', value: '5' }  
         ]
     }),
     mounted() {
@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         selectRoom: function (room) {
-            this.activeRoom = room;
+            this.activeRoom = this.activeRoom !== room ? room : null;
         }
     }
 

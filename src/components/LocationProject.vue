@@ -2,7 +2,7 @@
   <div class="filter__control-block">
     <vSelect
       v-model="selected"
-      placeholder="Жилой комплекс"
+      :placeholder="placeholder"
       label="name"
       :options="projects"
     />
@@ -21,7 +21,8 @@ export default {
         projects: Array
     },
     data: () => ({
-        selected: null
+        selected:    null,
+        placeholder: null,
     }),
     watch: {
         projects: function () {
@@ -35,6 +36,11 @@ export default {
                 });
             }
         }
+    },
+    mounted() {
+        const lang = this.$store.state.lang;
+
+        this.placeholder = this.$store.state.translater[lang].project
     },
     methods: {
         clearSelected() {

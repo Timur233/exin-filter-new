@@ -1,21 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
-
-body {
-	position: relative;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: column;
-	flex-direction: column;
-	font-family: OpenSans,Arial,sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	height: 100%;
-	background-color: #fff
-}
-
 .filter {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -242,7 +224,19 @@ body {
 	font-weight: 600;
 	padding: 0 8px;
 	border: 2px solid #cdcdcd;
-	border-radius: 5px
+	border-radius: 5px;
+	position: relative;
+}
+
+.filter__range-span {
+    position: absolute;
+    left: 8px;
+    top: -8px;
+    background: #fff;
+    padding: 0 4px;
+    font-size: 14px;
+    line-height: 1;
+    color: #606060;
 }
 
 .filter__range-input {
@@ -250,7 +244,7 @@ body {
     border: none;
     font-size: 18px;
     font-weight: 700;
-    width: 60px;
+    width: 80px;
 	background: none;
 	outline: none;
 }

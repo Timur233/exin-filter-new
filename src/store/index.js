@@ -26,36 +26,39 @@ export default new Vuex.Store({
             project:       null,
         },
         baseUrl:    null,
-        translater: JSON.parse(`{
-          "ru":{
-              "price":"Стоимость, млн. тг",
-              "area":"Площадь, м²",
-              "floor":"Этаж",
-              "rooms":"комн.",
-              "district":"Район",
-              "finishing":"Отделка",
-              "from":"от",
-              "before":"до",
-              "collapseFilter":"Свернуть фильтр",
-              "expandFilter":"Развернуть фильтр",
-              "find":"Найти",
-              "clear":"Сбросить"
+        lang:       'ru',
+        translater: {
+            ru: {
+                price:          "Стоимость, млн. тг",
+                area:           "Площадь,    м²",
+                floor:          "Этаж",
+                rooms:          "комн.",
+                district:       "Район",
+                project:        "Жилой комплекс",
+                finishing:      "Отделка",
+                from:           "от",
+                before:         "до",
+                collapseFilter: "Свернуть фильтр",
+                expandFilter:   "Развернуть фильтр",
+                find:           "Найти",
+                clear:          "Сбросить"
             },
-            "kz":{
-                "price":"Құны, млн тг",
-                "area":"Шаршы, м²",
-                "floor":"Қабат",
-                "rooms":"бөлм",
-                "district":"Ауданы",
-                "finishing":"Әрлеу",
-                "from":"бастап",
-                "before":"дейін",
-                "collapseFilter":"Сүзгіні жию",
-                "expandFilter":"Кеңейту сүзгісі",
-                "find":"Табу",
-                "clear":"Шығарып тастау"
-            }
-        }`),
+            kk: {
+                price:          "Құны, млн тг",
+                area:           "Шаршы, м²",
+                floor:          "Қабат",
+                rooms:          "бөлм",
+                district:       "Ауданы",
+                project:        "Тұрғын үй кешені",
+                finishing:      "Әрлеу",
+                from:           "бастап",
+                before:         "дейін",
+                collapseFilter: "Сүзгіні жию",
+                expandFilter:   "Кеңейту сүзгісі",
+                find:           "Табу",
+                clear:          "Шығарып тастау"
+            },
+        },
     },
     mutations: {
         setFilterData (state, payload) {
@@ -66,6 +69,9 @@ export default new Vuex.Store({
         },
         setBaseUrl (state, payload) {
             state.baseUrl = payload;
+        },
+        setLang (state, payload) {
+            state.lang = payload;
         }
     },
     actions: {
@@ -102,7 +108,13 @@ export default new Vuex.Store({
             }
 
             this.commit('setQueryData', query);
-            this.commit('setBaseUrl', baseUrl)
+            this.commit('setBaseUrl', baseUrl);
+
+            if (link.pathname.indexOf('kk/')) {
+                this.commit('setLang', 'kk');
+            } else {
+                this.commit('setLang', 'ru');
+            }
         }
     },
     modules: {

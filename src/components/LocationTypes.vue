@@ -14,7 +14,7 @@
       <label
         :for="type.value"
         @click="selectType(type.value)"
-      >{{ type.label }}</label>
+      >{{ type.label[lang] }}</label>
     </div>
   </div>
 </template>
@@ -25,12 +25,14 @@ export default {
     data: () => ({
         activeType: null,
         types:      [
-            { label: 'Квартира', value: '67a05dac-7e15-4fdd-848e-a36765fcac51' },
-            { label: 'Коммерция', value: '444a52f4-c677-4c63-8700-6461b1a52db4' },
-        ]
+            { label: {ru: 'Квартира', kk: 'Пәтер'}, value: '67a05dac-7e15-4fdd-848e-a36765fcac51' },
+            { label: {ru: 'Коммерция', kk: 'Коммерция'}, value: '444a52f4-c677-4c63-8700-6461b1a52db4' },
+        ],
+        lang: 'ru',
     }),
     mounted() {
         this.activeType = this.$store.state.queryData.location_type;
+        this.lang = this.$store.state.lang;
     },
     methods: {
         selectType: function (type) {

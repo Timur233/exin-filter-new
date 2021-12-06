@@ -2,7 +2,7 @@
   <div class="filter__control-block">
     <vSelect
       v-model="selected"
-      placeholder="Район"
+      :placeholder="placeholder"
       label="name"
       :options="districts"
       @input="changeDistrict"
@@ -22,7 +22,8 @@ export default {
         districts: Array
     },
     data: () => ({
-        selected: null
+        selected:    null,
+        placeholder: null,
     }),
     watch: {
         districts: function () {
@@ -36,6 +37,11 @@ export default {
                 });
             }
         }
+    },
+    mounted() {
+        const lang = this.$store.state.lang;
+
+        this.placeholder = this.$store.state.translater[lang].district
     },
     methods: {
         changeDistrict(val) {

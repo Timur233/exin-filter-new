@@ -4,13 +4,13 @@
       class="btn"
       @click="searchFilter"
     >
-      Найти
+      {{ translate.find }}
     </button>
     <button
       class="btn discharge"
       @click="clearFilter"
     >
-      Сбросить
+      {{ translate.clear }}
     </button>
   </div>
 </template>
@@ -19,7 +19,16 @@
 import VueSlider from "vue-slider-component";
 
 export default {
-    name:    "ControlButtons",
+    name: "ControlButtons",
+    data: () => ({
+        translate: {}
+    }),
+    created() {
+        const lang = this.$store.state.lang;
+
+        this.translate.find = this.$store.state.translater[lang].find;
+        this.translate.clear = this.$store.state.translater[lang].clear;
+    },
     methods: {
         clearFilter() {
             const baseUrl = this.$store.state.baseUrl;

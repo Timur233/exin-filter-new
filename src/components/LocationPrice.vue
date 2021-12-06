@@ -4,7 +4,7 @@
     class="filter__range-block"
   >
     <p class="filter__range-label">
-      Стоимость, млн. тг
+      {{ translate.price }}
     </p>
     <vue-slider 
       v-model="range" 
@@ -28,7 +28,9 @@
     <template>
       <div class="filter__range-val-block">
         <div class="filter__range-val">
-          от 
+          <span class="filter__range-span">
+            {{ translate.after }} 
+          </span>
           <input
             v-model.number="range[0]"
             class="filter__range-input"
@@ -38,7 +40,9 @@
           >
         </div> 
         <div class="filter__range-val">
-          до 
+          <span class="filter__range-span">
+            {{ translate.before }} 
+          </span>
           <input
             v-model.number="range[1]"
             class="filter__range-input"
@@ -67,15 +71,23 @@ export default {
     data: () => ({
         range:     [20, 100],
         isVisible: false,
+        translate: {},
     }),
     mounted() {
+        const translater = this.$store.state.translater;
+        const lang = this.$store.state.lang;
+
+        this.translate.price = translater[lang].price;
+        this.translate.after = translater[lang].from;
+        this.translate.before = translater[lang].before;
+
         setTimeout(()=>{
             this.range = [
                 this.$store.state.queryData.min_price,
                 this.$store.state.queryData.max_price
             ];
             this.isVisible = true;    
-        }, 1000);
+        }, 700);
     }
 
 
