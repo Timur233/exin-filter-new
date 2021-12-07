@@ -110,7 +110,7 @@ export default new Vuex.Store({
             this.commit('setQueryData', query);
             this.commit('setBaseUrl', baseUrl);
 
-            if (link.pathname.indexOf('kk/')) {
+            if (link.pathname.split('/').includes('kk')) {
                 this.commit('setLang', 'kk');
             } else {
                 this.commit('setLang', 'ru');

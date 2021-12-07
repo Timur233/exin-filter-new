@@ -65,8 +65,14 @@ export default {
         VueSlider
     },
     props: {
-        minPrice: Number,
-        maxPrice: Number
+        minPrice: {
+            type:    Number,
+            default: -1000000,
+        },
+        maxPrice: {
+            type:    Number,
+            default: 1000000
+        }
     },
     data: () => ({
         range:     [20, 100],
@@ -87,7 +93,7 @@ export default {
                 this.$store.state.queryData.max_price
             ];
             this.isVisible = true;    
-        }, 700);
+        }, 200);
     }
 
 

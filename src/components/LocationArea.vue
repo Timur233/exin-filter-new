@@ -65,8 +65,14 @@ export default {
         VueSlider,
     },
     props: {
-        minArea: Number,
-        maxArea: Number
+        minArea: {
+            type:    Number,
+            default: -1000000,
+        },
+        maxArea: {
+            type:    Number,
+            default: 1000000
+        }
     },
     data: () => ({
         range:     [50, 98],
@@ -83,17 +89,15 @@ export default {
 
         setTimeout(()=>{
             this.range = [
-                this.$store.state.queryData.min_area,
-                this.$store.state.queryData.max_area
+                this.$store.state.queryData.min_area + 1,
+                this.$store.state.queryData.max_area - 1
             ];
             this.isVisible = true;
-        }, 1000);
+        }, 200);
     },
     methods: {
         setRange(pos, event) {
             const val = event.target.value;
-
-            console.log(this.range);
 
             if (val <= this.min) {
                 return (this.range[pos] = this.min);

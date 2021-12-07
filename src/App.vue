@@ -1,6 +1,9 @@
 <template>
   <div class="filter__block">
-    <div class="filter__wrap">
+    <div
+      v-show="isVisible"
+      class="filter__wrap"
+    >
       <LocationTypes ref="LocationTypes" />
       <RoomsCount ref="RoomsCount" />
       <div class="filter__ranges indent-block">
@@ -32,6 +35,7 @@
         <ControlButtons @searchLocations="searchLocations" />
       </div>
     </div>
+    <!--HideFilterButton @toggleFilter="toggleFilter" /-->
   </div>
 </template>
 
@@ -43,6 +47,7 @@ import LocationArea from "./components/LocationArea.vue";
 import LocationDistrict from "./components/LocationDistrict.vue";
 import LocationProject from "./components/LocationProject.vue";
 import ControlButtons from "./components/ControlButtons.vue";
+import HideFilterButton from "./components/HideFilterButton.vue";
 import "vue-slider-component/theme/default.css";
 
 export default {
@@ -55,9 +60,11 @@ export default {
         LocationDistrict,
         LocationProject,
         ControlButtons,
+        // HideFilterButton,
     },
     data: () => ({
         selectedDistrict: null,
+        isVisible:        true,
     }),
     computed: {
         filterData(){
@@ -95,9 +102,6 @@ export default {
         this.$store.dispatch('getQueryData');
         this.$store.dispatch("getFilterData");
     },
-    mounted() {
-        console.log(this.$refs.LocationTypes.activeType);
-    },
     methods: {
         selectDistrict(obj) {
             this.selectedDistrict = obj ? obj.uuid : null;
@@ -124,7 +128,10 @@ export default {
             });
 
             document.location.href = link.href;
-        }
+        },
+        toggleFilter() {
+            this.isVisible = !this.isVisible;
+        },
     }
 };
 </script>
